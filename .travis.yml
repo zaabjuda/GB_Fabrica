@@ -1,0 +1,16 @@
+language: python
+services:
+- postgresql
+python:
+- '3.4'
+addons:
+  postgresql: "9.3"
+install:
+- pip install -r requirements.txt
+before_script:
+  - psql -c "CREATE ROLE gbf LOGIN ENCRYPTED PASSWORD 'md5be0d3c219d52e30834fcc590774ef370'\
+            NOSUPERUSER INHERIT CREATEDB NOCREATEROLE NOREPLICATION;" -U postgres
+  - psql -c "CREATE DATABASE test_gbf WITH OWNER = gbf ENCODING = 'UTF8' CONNECTION LIMIT = -1;" -U postgres
+script:
+  - pep8 .
+  - python manage.py test --noinput

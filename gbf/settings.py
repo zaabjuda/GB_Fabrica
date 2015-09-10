@@ -106,6 +106,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 # Guest Book Fabrica special settings
 
 GB_PREMODERATE_DEFAULT = True
