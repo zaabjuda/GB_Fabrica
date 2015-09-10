@@ -18,7 +18,7 @@ class GBFUserCreationForm(UserCreationForm):
 class GBFUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = GBFUser
-        fields = ('username', 'email', 'password', 'is_active', 'is_staff', 'is_superuser', 'user_permissions')
+        fields = ('username', 'email', 'password', 'is_active', 'is_staff', 'is_superuser', 'user_permissions', 'tariff_plan')
 
     def clean_password(self):
         return self.initial['password']
