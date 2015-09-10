@@ -10,13 +10,6 @@ from django.conf import settings
 from gbfuser.models import GBFUser
 
 
-class GuestBookMessageManager(models.Manager):
-    def create_message(self, message_data):
-        is_visible = not self.guest_book.is_moderated
-        gb_message = self.create(is_visible=is_visible, **message_data)
-        return gb_message
-
-
 class GuestBook(models.Model):
     name = models.CharField('Guest Book Name', max_length=250)
     slug = models.SlugField('Guest Book Slug', max_length=50)
@@ -28,13 +21,22 @@ class GuestBook(models.Model):
         verbose_name_plural = 'Guest Books'
         unique_together = (('name', 'owner',), ('slug', 'owner'),)
 
+    def create_message(self, message_data):
+        """
+        :param message_data:
+        :type message_data: GuestBookMessageData
+        :return:
+        :rtype: GuestBookMessages
+        """
+        is_visible = not self.is_moderated
+        gb_message = GuestBookMessages.objects.create(is_visible=is_visible, guest_book=self, **message_data.to_dict())
+        return gb_message
+
     def __str__(self):
         return "{} Owned by {} ".format(self.name, self.owner.get_full_name())
 
 
 class GuestBookMessages(models.Model):
-    objects = GuestBookMessageManager()
-
     guest_book = models.ForeignKey(GuestBook)
     message = models.TextField('Message')  # TODO Align limit
     author = models.ForeignKey(GBFUser)

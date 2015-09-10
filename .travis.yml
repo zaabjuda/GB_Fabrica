@@ -13,4 +13,4 @@ before_script:
   - psql -c "CREATE DATABASE test_gbf WITH OWNER = gbf ENCODING = 'UTF8' CONNECTION LIMIT = -1;" -U postgres
 script:
   - pep8 .
-  - python manage.py test --noinput
+  - python -Wall manage.py test --noinput
