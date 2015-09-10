@@ -1,0 +1,1 @@
+[{"fields": {"gb_limit": 3, "name": "Start", "price": 0}, "model": "core.tariffplan", "pk": 1}, {"fields": {"gb_limit": 32767, "name": "Unlimeted", "price": 400}, "model": "core.tariffplan", "pk": 2}]
