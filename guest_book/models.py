@@ -2,6 +2,8 @@
 __author__ = "Dmitry Zhiltsov"
 __copyright__ = "Copyright 2015, Dmitry Zhiltsov"
 
+from datetime import datetime as dt
+
 from django.db import models
 from django.conf import settings
 
@@ -43,6 +45,19 @@ class GuestBookMessages(models.Model):
     class Meta:
         verbose_name = 'Guest Book Message'
         verbose_name_plural = 'Guest Books Messages'
+
+    def approve_message(self):
+        """
+        This method used when owner GB execute approve action on message
+
+        :return: self
+        """
+        if self.is_visible:
+            return self
+        self.is_visible = True
+        self.time_of_moderate = dt.now()
+        self.save()
+        return self
 
     def __str__(self):
         return "Author: {} Guest Book: {} Guest Book Owner: {}".format(self.guest_book.name, self.guest_book.owner,
