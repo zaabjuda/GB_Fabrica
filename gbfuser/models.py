@@ -9,6 +9,8 @@ from django.utils import timezone
 
 from core.models import TariffPlan
 
+from .errors import LimitExceeded
+
 
 class GBFUserManager(BaseUserManager):
     def _create_user(self, username, email, password, is_staff, is_superuser, **extra_fields):
@@ -70,3 +72,9 @@ class GBFUser(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         "Returns the short name for the user."
         return self.first_name
+
+    def create_gb(self, gb_data):
+        from guest_book.models import GuestBook
+        if self.guestbook_set.all().count() >= self.tariff_plan.gb_limit:
+            raise LimitExceeded(self.tariff_plan.gb_limit)
+        return GuestBook.objects.create(owner=self, **gb_data.to_dict())
