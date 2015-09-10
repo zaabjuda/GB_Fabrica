@@ -2,7 +2,6 @@
 __author__ = "Dmitry Zhiltsov"
 __copyright__ = "Copyright 2015, Dmitry Zhiltsov"
 
-
 from strictdict import StrictDict
 from strictdict import fields as f
 

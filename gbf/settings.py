@@ -37,12 +37,19 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social.apps.django_app.default',
     'gbfuser',
     'core',
     'guest_book',
 )
 
 AUTH_USER_MODEL = 'gbfuser.GBFUser'
+SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+SOCIAL_AUTH_FACEBOOK_KEY = '1606000646330306'
+SOCIAL_AUTH_FACEBOOK_SECRET = '231997a7387464f435fbac9af8ad0a92'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email, age_range'}
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,6 +75,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -86,6 +95,10 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
