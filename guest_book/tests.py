@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from gbfuser.models import GBFUser
 from guest_book.defs import GuestBookMessageData
-from guest_book.models import GuestBook, GuestBookMessages
+from guest_book.models import GuestBook
 
 
 class GuestBookTestCase(TestCase):
@@ -32,6 +32,14 @@ class GuestBookTestCase(TestCase):
     def testCreateGuestBookMessage(self):
         gb1, gb2 = self._create_gbs()
         msg_gb1 = gb1.create_message(GuestBookMessageData(message="Hello, World", author_id=self.gb_message_author.id))
-        msg_gb2 = gb2.create_message(GuestBookMessageData(message="Hello, World", author_id=self.gb_message_author.id))
+        msg_gb2 = gb2.create_message(GuestBookMessageData(message="Hello, World1", author_id=self.gb_message_author.id))
         self.assertFalse(msg_gb1.is_visible)
         self.assertTrue(msg_gb2.is_visible)
+
+    def testApproveGuestBookMessage(self):
+        gb1, gb2 = self._create_gbs()
+        msg_gb1 = gb1.create_message(GuestBookMessageData(message="Hello, World", author_id=self.gb_message_author.id))
+        self.assertFalse(msg_gb1.is_visible)
+        self.assertTrue(msg_gb1.approve_message())
+        self.assertTrue(msg_gb1.is_visible)
+        self.assertFalse(msg_gb1.approve_message())

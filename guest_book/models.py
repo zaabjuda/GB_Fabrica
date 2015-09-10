@@ -52,14 +52,14 @@ class GuestBookMessages(models.Model):
         """
         This method used when owner GB execute approve action on message
 
-        :return: self
+        :return: True if is_visible field changed, False if is_visible field already is True
         """
         if self.is_visible:
-            return self
+            return False
         self.is_visible = True
         self.time_of_moderate = dt.now()
         self.save()
-        return self
+        return True
 
     def __str__(self):
         return "Author: {} Guest Book: {} Guest Book Owner: {}".format(self.guest_book.name, self.guest_book.owner,
