@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    {% if not request.user %}
+        {% url "social:auth" backend="facebook" %}
+        {{ backends }}
+    {% else %}
+        {{ backends }}
+        {{ request.user }}
+        {% url "social:disconnect" backend="facebook" %}
+    {% endif %}
+</body>
+</html>

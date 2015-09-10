@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'gbfuser',
     'core',
     'guest_book',
+    'web',
 )
 
 AUTH_USER_MODEL = 'gbfuser.GBFUser'
@@ -49,7 +50,7 @@ SOCIAL_AUTH_FACEBOOK_KEY = '1606000646330306'
 SOCIAL_AUTH_FACEBOOK_SECRET = '231997a7387464f435fbac9af8ad0a92'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email, age_range'}
-
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
