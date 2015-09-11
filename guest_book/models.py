@@ -4,8 +4,9 @@ __copyright__ = "Copyright 2015, Dmitry Zhiltsov"
 
 from datetime import datetime as dt
 
-from django.db import models
+from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.db import models
 
 from gbfuser.models import GBFUser
 
@@ -31,6 +32,9 @@ class GuestBook(models.Model):
         is_visible = not self.is_moderated
         gb_message = GuestBookMessages.objects.create(is_visible=is_visible, guest_book=self, **message_data.to_dict())
         return gb_message
+
+    def get_absolute_url(self):
+        return reverse('gb_view', kwargs={'slug': self.slug, 'owner': self.owner.username})
 
     def __str__(self):
         return "{} Owned by {} ".format(self.name, self.owner.get_full_name())
