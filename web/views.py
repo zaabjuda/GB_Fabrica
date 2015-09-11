@@ -81,4 +81,9 @@ class SettingsGB(_BaseGBUpdate):
 
 
 class UserGBs(ListView):
-    pass
+    model = GuestBook
+
+    def get_queryset(self):
+        qs = super(UserGBs, self).get_queryset()
+        qs = qs.filter(owner=self.request.user)
+        return qs

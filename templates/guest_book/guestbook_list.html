@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block main_content %}
+    <h2> My Guest Books</h2>
+    {% for gb in object_list %}
+        <div class="panel panel-info">
+          <div class="panel-heading">Name: {{ gb.name }} Moderate: {{ gb.is_moderated }}</div>
+          <div class="panel-body">
+            <a href="{{ gb.get_absolute_url }}">Go to book</a>
+          </div>
+        </div>
+    {% endfor %}
+    {# TODO Pagination required #}
+{% endblock %}
