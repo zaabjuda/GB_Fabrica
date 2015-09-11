@@ -36,7 +36,7 @@ class GuestBook(models.Model):
     def get_visible_messages(self):
         qs = self.guestbookmessages_set.all()
         if self.is_moderated:
-            qs.filter(is_visible=True)
+            qs = qs.filter(is_visible=True)
         return qs
 
     def get_moderate_messages(self):

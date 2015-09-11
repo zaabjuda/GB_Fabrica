@@ -3,9 +3,13 @@ __author__ = "Dmitry Zhiltsov"
 __copyright__ = "Copyright 2015, Dmitry Zhiltsov"
 
 from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView, RedirectView, CreateView, DetailView, UpdateView, ListView
 
-from guest_book.models import GuestBook
+from guest_book.defs import GuestBookMessageData
+from guest_book.models import GuestBook, GuestBookMessages
+
+from .forms import CreateMessageForm
 
 
 class IndexView(TemplateView):
@@ -33,20 +37,43 @@ class AddGB(CreateView):
         return super(AddGB, self).form_valid(form)
 
 
-class ViewGB(DetailView):
-    model = GuestBook
-
+class _BaseGBDetail(DetailView):
     def get_object(self, queryset=None):
         owner = self.kwargs.get('owner')
         if not queryset:
             queryset = GuestBook.objects
         queryset = queryset.filter(owner__username=owner)
 
-        return super(ViewGB, self).get_object(queryset=queryset)
+        return super(_BaseGBDetail, self).get_object(queryset=queryset)
 
 
-class AddMessage(CreateView):
-    pass
+class _BaseGBUpdate(UpdateView):
+    def get_object(self, queryset=None):
+        owner = self.kwargs.get('owner')
+        if not queryset:
+            queryset = GuestBook.objects
+        queryset = queryset.filter(owner__username=owner)
+
+        return super(_BaseGBUpdate, self).get_object(queryset=queryset)
+
+
+class ViewGB(_BaseGBDetail):
+    model = GuestBook
+
+
+class AddMessage(_BaseGBUpdate):
+    template_name = 'create_message.html'
+    template_name_suffix = ''
+    model = GuestBook
+    form_class = CreateMessageForm
+
+    def form_valid(self, form):
+        message = form.data.get('message')
+        msg_data = GuestBookMessageData(message=message, author_id=self.request.user.id)
+        gb = self.get_object()
+        gb.create_message(msg_data)
+        return HttpResponseRedirect(self.get_success_url())
+
 
 
 class SettingsGB(UpdateView):
