@@ -75,7 +75,6 @@ class AddMessage(_BaseGBUpdate):
         return HttpResponseRedirect(self.get_success_url())
 
 
-
 class SettingsGB(UpdateView):
     pass
 
