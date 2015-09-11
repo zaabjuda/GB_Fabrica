@@ -33,6 +33,15 @@ class GuestBook(models.Model):
         gb_message = GuestBookMessages.objects.create(is_visible=is_visible, guest_book=self, **message_data.to_dict())
         return gb_message
 
+    def get_visible_messages(self):
+        qs = self.guestbookmessages_set.all()
+        if self.is_moderated:
+            qs.filter(is_visible=True)
+        return qs
+
+    def get_moderate_messages(self):
+        return self.guestbookmessages_set.filter(is_visible=False)
+
     def get_absolute_url(self):
         return reverse('gb_view', kwargs={'slug': self.slug, 'owner': self.owner.username})
 

@@ -1,4 +1,13 @@
 {% extends 'base.html' %}
 {% block main_content %}
-{{ object.name }}
+    <h2> Guest Book {{ object.name }} by user {{ object.owner.get_short_name }}</h2>
+    {% for message in object.get_visible_messages %}
+        <div class="panel panel-info">
+          <div class="panel-heading">User {{ message.author.get_short_name }} wrote at {{ message.time_of_creation }}</div>
+          <div class="panel-body">
+            {{ message.message }}
+          </div>
+        </div>
+    {% endfor %}
+    {# TODO Pagination required #}
 {% endblock %}
