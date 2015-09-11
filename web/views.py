@@ -77,7 +77,7 @@ class AddMessage(_BaseGBUpdate):
 
 class SettingsGB(_BaseGBUpdate):
     model = GuestBook
-    fields = ['is_moderated']
+    fields = ['name', 'slug', 'is_moderated']
 
 
 class UserGBs(ListView):
