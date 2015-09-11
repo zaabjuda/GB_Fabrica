@@ -7,6 +7,7 @@ from django.contrib.auth.admin import admin
 from guest_book.models import GuestBook, GuestBookMessages
 from web.admin import admin_site
 
+
 class GuestBookAdmin(admin.ModelAdmin):
     pass
 
