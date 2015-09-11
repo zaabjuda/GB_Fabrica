@@ -75,8 +75,9 @@ class AddMessage(_BaseGBUpdate):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class SettingsGB(UpdateView):
-    pass
+class SettingsGB(_BaseGBUpdate):
+    model = GuestBook
+    fields = ['is_moderated']
 
 
 class UserGBs(ListView):
