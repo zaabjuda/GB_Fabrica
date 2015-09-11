@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from web.views import AddGB, IndexView, LogoutView, ViewGB
+from web.views import AddGB, IndexView, LogoutView, ViewGB, AddMessage, SettingsGB, UserGBs
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -25,4 +25,8 @@ urlpatterns = [
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^add/$', AddGB.as_view(), name='add_gb'),
     url(r'^gb/(?P<owner>\w{1,30})/(?P<slug>\w{1,50})/$', ViewGB.as_view(), name='gb_view'),
+    url(r'^gb/(?P<owner>\w{1,30})/(?P<slug>\w{1,50})/message/new$', AddMessage.as_view(), name='add_message'),
+    url(r'^gb/(?P<owner>\w{1,30})/(?P<slug>\w{1,50})/settings$', SettingsGB.as_view(), name='gb_settings'),
+    url(r'^my$', UserGBs.as_view(), name='my_gbs'),
+
 ]
