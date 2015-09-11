@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from web.admin import admin_site
 from web.views import AddGB, IndexView, LogoutView, ViewGB, AddMessage, SettingsGB, UserGBs
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^service_panel/', include(admin_site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),

@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView, RedirectView, CreateView, DetailView, UpdateView, ListView
 
 from guest_book.defs import GuestBookMessageData
-from guest_book.models import GuestBook, GuestBookMessages
+from guest_book.models import GuestBook
 
 from .forms import CreateMessageForm
 
@@ -44,7 +44,7 @@ class AddGB(LoginRequiredMixin, CreateView):
         return super(AddGB, self).form_valid(form)
 
 
-class _BaseGBDetail(LoginRequiredMixin, DetailView):
+class _BaseGBDetail(DetailView):
     def get_object(self, queryset=None):
         owner = self.kwargs.get('owner')
         if not queryset:
@@ -54,7 +54,7 @@ class _BaseGBDetail(LoginRequiredMixin, DetailView):
         return super(_BaseGBDetail, self).get_object(queryset=queryset)
 
 
-class _BaseGBUpdate(LoginRequiredMixin, UpdateView):
+class _BaseGBUpdate(UpdateView):
     def get_object(self, queryset=None):
         owner = self.kwargs.get('owner')
         if not queryset:
