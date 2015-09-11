@@ -10,6 +10,7 @@ HOW-TO RUN
 2. pip install -r requirements.txt
 3. copy gbf/local_settings_template.py to gbf/local_settings.py and edit it
 3. python manage.py test
-4. python manage.py collectstatic
-5. python manage.py runserver 0.0.0.0:8000. Please use this host:port because facebook application configured for this.
+5. python manage.py migrate
+6. python manage.py collectstatic
+7. python manage.py runserver 0.0.0.0:8000. Please use this host:port because facebook application configured for this.
 
