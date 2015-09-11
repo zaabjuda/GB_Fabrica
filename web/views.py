@@ -16,6 +16,7 @@ class LogoutView(RedirectView):
     """
     Provides users the ability to logout
     """
+    permanent = True
     url = '/'
 
     def get(self, request, *args, **kwargs):
