@@ -2,7 +2,7 @@
 __author__ = "Dmitry Zhiltsov"
 __copyright__ = "Copyright 2015, Dmitry Zhiltsov"
 
-from django.contrib.auth import logout
+from django.contrib.auth import logout, decorators
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView, RedirectView, CreateView, DetailView, UpdateView, ListView
 
@@ -10,6 +10,13 @@ from guest_book.defs import GuestBookMessageData
 from guest_book.models import GuestBook, GuestBookMessages
 
 from .forms import CreateMessageForm
+
+
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+        return decorators.login_required(view)
 
 
 class IndexView(TemplateView):
@@ -28,7 +35,7 @@ class LogoutView(RedirectView):
         return super(LogoutView, self).get(request, *args, **kwargs)
 
 
-class AddGB(CreateView):
+class AddGB(LoginRequiredMixin, CreateView):
     model = GuestBook
     fields = ['name', 'slug', 'is_moderated']
 
@@ -37,7 +44,7 @@ class AddGB(CreateView):
         return super(AddGB, self).form_valid(form)
 
 
-class _BaseGBDetail(DetailView):
+class _BaseGBDetail(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         owner = self.kwargs.get('owner')
         if not queryset:
@@ -47,7 +54,7 @@ class _BaseGBDetail(DetailView):
         return super(_BaseGBDetail, self).get_object(queryset=queryset)
 
 
-class _BaseGBUpdate(UpdateView):
+class _BaseGBUpdate(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         owner = self.kwargs.get('owner')
         if not queryset:
@@ -57,11 +64,11 @@ class _BaseGBUpdate(UpdateView):
         return super(_BaseGBUpdate, self).get_object(queryset=queryset)
 
 
-class ViewGB(_BaseGBDetail):
+class ViewGB(LoginRequiredMixin, _BaseGBDetail):
     model = GuestBook
 
 
-class AddMessage(_BaseGBUpdate):
+class AddMessage(LoginRequiredMixin, _BaseGBUpdate):
     template_name = 'create_message.html'
     template_name_suffix = ''
     model = GuestBook
@@ -75,12 +82,19 @@ class AddMessage(_BaseGBUpdate):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class SettingsGB(_BaseGBUpdate):
+class SettingsGB(LoginRequiredMixin, _BaseGBUpdate):
     model = GuestBook
     fields = ['name', 'slug', 'is_moderated']
 
+    def get_object(self, queryset=None):
+        owner = self.kwargs.get('owner')
+        if not queryset:
+            queryset = GuestBook.objects
+        queryset = queryset.filter(owner__username=owner, owner=self.request.user)
+        return super(SettingsGB, self).get_object(queryset=queryset)
 
-class UserGBs(ListView):
+
+class UserGBs(LoginRequiredMixin, ListView):
     model = GuestBook
 
     def get_queryset(self):
