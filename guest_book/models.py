@@ -75,5 +75,5 @@ class GuestBookMessages(models.Model):
         return True
 
     def __str__(self):
-        return "Author: {} Guest Book: {} Guest Book Owner: {}".format(self.guest_book.name, self.guest_book.owner,
-                                                                       self.author)
+        return "Author: {} Guest Book: {} Guest Book Owner: {}".format(self.author, self.guest_book.name,
+                                                                       self.guest_book.owner)

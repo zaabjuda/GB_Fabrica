@@ -13,4 +13,4 @@ class MyAdminSite(admin.AdminSite):
         return request.user.is_active
 
 
-admin_site = MyAdminSite()
+admin_site = MyAdminSite(name='service_panel')
